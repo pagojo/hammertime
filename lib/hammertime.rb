@@ -1,3 +1,7 @@
+#
+# Copyright © 2010 Avdi Grimm. See LICENSE for details.
+# Patched and ported to Ruby 1.9.x by John Pagonis and Vassilis Vatikiotis, Decemper 2011
+#
 require 'highline'
 
 module Hammertime
@@ -103,17 +107,32 @@ module Hammertime
   ensure
     ::Hammertime.stopped = false
   end
-
+  
   def hammertime_original_raise(*args)
     Kernel.instance_method(:raise).bind(self).call(*args)
   end
 
   def fail(*args)
+    h_raise = Object.instance_method(:raise)
+    r_raise = Kernel.instance_method(:raise)
+    self.class.send(:define_method, r_raise.name, r_raise)
     hammertime_raise(*args)
+    self.class.send(:define_method, h_raise.name, h_raise)
   end
 
   def raise(*args)
+    #
+    # In order to avoid failure due to deeper exceptions thrown by other components that we may use 
+    # we need to make sure that during hammertime_raise the original raise is used. Otherwise an exception 
+    # thrown, such as a ubiquitous LoadError during 'require', will lead to re-entering our version of raise.
+    # The results of such reentrance are not obvious and are very misleading (such as the Mutex.Lock 
+    # <ThreadError: deadlock; recursive locking> that is manifested in Ruby 1.9.x)
+    #   
+    h_raise = Object.instance_method(:raise)
+    r_raise = Kernel.instance_method(:raise)
+    self.class.send(:define_method, r_raise.name, r_raise)
     hammertime_raise(*args)
+    self.class.send(:define_method, h_raise.name, h_raise)
   end
 
   private

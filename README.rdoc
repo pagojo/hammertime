@@ -88,3 +88,5 @@ This enables a fix-and-continue style of development:
 == Copyright
 
 Copyright (c) 2010 Avdi Grimm. See LICENSE for details.
+Patched and ported to Ruby 1.9.x by John Pagonis and Vassilis Vatikiotis, December 2011
+

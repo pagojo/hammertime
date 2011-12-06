@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{hammertime}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Avdi Grimm"]
-  s.date = %q{2010-01-20}
+  s.date = %q{2011-12-06}
   s.description = %q{When this library is required, it replaces the default Ruby exception-raising
 behavior.  When an error is raised, the developer is presented with a menu
 enabling them to ignore the error, view a stack trace, debug the error using IRB
